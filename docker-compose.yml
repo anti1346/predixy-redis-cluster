@@ -10,7 +10,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./docker/predixy/conf:/etc/predixy/conf
-      - ./predixy/logs:/etc/logs
+      - ./predixy_data/logs:/etc/logs
     ports:
       - 7617:7617
     networks: 
@@ -28,8 +28,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./docker/redis/conf/redis.conf:/etc/redis/redis.conf
-      - ./redis/node1/data:/data
-      - ./redis/node1/logs:/logs
+      - ./redis_data/node1/data:/data
+      - ./redis_data/node1/logs:/logs
     #network_mode: host
     ports:
       - 6381:6379
@@ -48,8 +48,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./docker/redis/conf/redis.conf:/etc/redis/redis.conf
-      - ./redis/node2/data:/data
-      - ./redis/node2/logs:/logs
+      - ./redis_data/node2/data:/data
+      - ./redis_data/node2/logs:/logs
     #network_mode: host
     ports:
       - 6382:6379
@@ -68,8 +68,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./docker/redis/conf/redis.conf:/etc/redis/redis.conf
-      - ./redis/node3/data:/data
-      - ./redis/node3/logs:/logs
+      - ./redis_data/node3/data:/data
+      - ./redis_data/node3/logs:/logs
     #network_mode: host
     ports:
       - 6383:6379
@@ -88,8 +88,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./docker/redis/conf/redis.conf:/etc/redis/redis.conf
-      - ./redis/node4/data:/data
-      - ./redis/node4/logs:/logs
+      - ./redis_data/node4/data:/data
+      - ./redis_data/node4/logs:/logs
     #network_mode: host
     ports:
       - 6384:6379
@@ -108,8 +108,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./docker/redis/conf/redis.conf:/etc/redis/redis.conf
-      - ./redis/node5/data:/data
-      - ./redis/node5/logs:/logs
+      - ./redis_data/node5/data:/data
+      - ./redis_data/node5/logs:/logs
     #network_mode: host
     ports:
       - 6385:6379
@@ -128,8 +128,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./docker/redis/conf/redis.conf:/etc/redis/redis.conf
-      - ./redis/node6/data:/data
-      - ./redis/node6/logs:/logs
+      - ./redis_data/node6/data:/data
+      - ./redis_data/node6/logs:/logs
     #network_mode: host
     ports:
       - 6386:6379
