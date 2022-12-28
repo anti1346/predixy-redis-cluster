@@ -6,7 +6,7 @@ docker network create --gateway 172.24.0.1 --subnet 172.24.0.0/16 redis-net
 ```
 
 #### 레디스 정보
-(predixy) redis info
+##### (predixy) redis info
 ```
 redis-cli -h localhost -c -p 7617 info
 ```
@@ -101,7 +101,7 @@ SendBytes:1780
 RecvBytes:69845
 ...
 ```
-(nodes) redis cluster info
+##### (nodes) redis cluster info
 ```
 redis-cli -h localhost -c -p 6381 cluster info
 ```
@@ -125,7 +125,7 @@ cluster_stats_messages_meet_received:8
 cluster_stats_messages_received:7035
 ```
 
-(nodes) redis cluster nodes 
+##### (nodes) redis cluster nodes 
 ```
 redis-cli -h localhost -c -p 6381 cluster nodes
 ```
@@ -144,10 +144,25 @@ c59b5df3324953d2d8acba388f793ead4fa8611f 172.24.0.17:6379@16379 slave a45d36d8d1
 
 #### 레디스 데이터 입출력(predixy 7616)
 ```
-$ redis-cli -c -h 127.0.0.1 -p 7617 set hello world
-
-$ redis-cli -c -h 127.0.0.1 -p 7617 get hello
+redis-cli -c -h 127.0.0.1 -p 7617 set hello world
 ```
+```
+redis-cli -c -h 127.0.0.1 -p 7617 get hello
+```
+```
+$ redis-cli -h localhost -c -p 6381
+localhost:6381> get hello
+"world"
+localhost:6381> quit
+```
+```
+$ redis-cli -h localhost -c -p 6382
+localhost:6382> get hello
+-> Redirected to slot [866] located at 172.24.0.11:6379
+"world"
+172.24.0.11:6379>
+```
+
 ###### 레디스 서버(컨테이너)로 데이타 입출력
 ```
 docker exec -it node1 redis-cli -c get hello
