@@ -137,19 +137,79 @@ services:
       redis-net: 
         ipv4_address: 172.24.0.16
 
+  node7:
+    image: redis:6.2.4
+    restart: unless-stopped
+    container_name: node7
+    hostname: node7
+    command: /bin/bash -c "redis-server /etc/redis/redis.conf"
+    sysctls:
+      - net.core.somaxconn=65535
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./docker/redis/conf/redis.conf:/etc/redis/redis.conf
+      - ./redis_data/node7/data:/data
+      - ./redis_data/node7/logs:/logs
+    #network_mode: host
+    ports:
+      - 6387:6379
+    networks:
+      redis-net:
+        ipv4_address: 172.24.0.17
+
+  node8:
+    image: redis:6.2.4
+    restart: unless-stopped
+    container_name: node8
+    hostname: node8
+    command: /bin/bash -c "redis-server /etc/redis/redis.conf"
+    sysctls:
+      - net.core.somaxconn=65535
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./docker/redis/conf/redis.conf:/etc/redis/redis.conf
+      - ./redis_data/node8/data:/data
+      - ./redis_data/node8/logs:/logs
+    #network_mode: host
+    ports:
+      - 6388:6379
+    networks:
+      redis-net:
+        ipv4_address: 172.24.0.18
+
+  node9:
+    image: redis:6.2.4
+    restart: unless-stopped
+    container_name: node9
+    hostname: node9
+    command: /bin/bash -c "redis-server /etc/redis/redis.conf"
+    sysctls:
+      - net.core.somaxconn=65535
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./docker/redis/conf/redis.conf:/etc/redis/redis.conf
+      - ./redis_data/node9/data:/data
+      - ./redis_data/node9/logs:/logs
+    #network_mode: host
+    ports:
+      - 6389:6379
+    networks:
+      redis-net:
+        ipv4_address: 172.24.0.19
+
   redis-cluster:
     image: redis:6.2.4
     #restart: unless-stopped
     container_name: redis-cluster
     hostname: redis-cluster
-    command: redis-cli --cluster create 172.24.0.11:6379 172.24.0.12:6379 172.24.0.13:6379 172.24.0.14:6379 172.24.0.15:6379 172.24.0.16:6379 --cluster-replicas 1 --cluster-yes
+    command: redis-cli --cluster create 172.24.0.11:6379 172.24.0.12:6379 172.24.0.13:6379 172.24.0.14:6379 172.24.0.15:6379 172.24.0.16:6379 172.24.0.17:6379 172.24.0.18:6379 172.24.0.19:6379 --cluster-replicas 2 --cluster-yes
     sysctls:
       - net.core.somaxconn=65535
     volumes:
       - /etc/localtime:/etc/localtime:ro
     #network_mode: host
     ports:
-      - 6387:6379
+      - 6379:6379
     depends_on:
       - node1
       - node2
@@ -157,9 +217,12 @@ services:
       - node4
       - node5
       - node6
-    networks: 
-      redis-net: 
-        ipv4_address: 172.24.0.17
+      - node7
+      - node8
+      - node9
+    networks:
+      redis-net:
+        ipv4_address: 172.24.0.20
 
 #docker network create --gateway 172.24.0.1 --subnet 172.24.0.0/16 redis-net
 networks: 
