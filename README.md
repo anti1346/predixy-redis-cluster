@@ -6,31 +6,140 @@ docker network create --gateway 172.24.0.1 --subnet 172.24.0.0/16 redis-net
 ```
 
 #### 레디스 정보
+(predixy) redis info
 ```
-$ docker exec -it node1 redis-cli cluster info
+redis-cli -h localhost -c -p 7617 info
+```
+```
+$ redis-cli -h localhost -c -p 7617 info
+# Proxy
+Version:1.0.4
+Name:PredixyExample
+Bind:0.0.0.0:7617
+RedisMode:proxy
+SingleThread:false
+WorkerThreads:4
+Uptime:1672207194
+UptimeSince:2022-12-28 14:59:54
+
+# SystemResource
+UsedMemory:315864
+MaxMemory:0
+MaxRSS:6922240
+UsedCpuSys:0.582
+UsedCpuUser:0.283
+
+# Stats
+Accept:4
+ClientConnections:1
+TotalRequests:604
+TotalResponses:603
+TotalRecvClientBytes:56
+TotalSendServerBytes:15936
+TotalRecvServerBytes:622040
+TotalSendClientBytes:6916
+
+# Servers
+Server:172.24.0.11:6379
+Role:master
+Group:05baedca03d9e79de84cacd955fcafcca0a90343
+DC:
+CurrentIsFail:0
+Connections:4
+Connect:4
+Requests:75
+Responses:75
+SendBytes:2004
+RecvBytes:78180
+
+Server:172.24.0.12:6379
+Role:master
+Group:a45d36d8d19b27aaa3b0736249f72aec601d30e4
+DC:
+CurrentIsFail:0
+Connections:4
+Connect:4
+Requests:57
+Responses:57
+SendBytes:1500
+RecvBytes:58015
+
+Server:172.24.0.13:6379
+Role:master
+Group:08c71d79b8998af23a455c40003454a3157d20b4
+DC:
+CurrentIsFail:0
+Connections:4
+Connect:4
+Requests:68
+Responses:68
+SendBytes:1808
+RecvBytes:71028
+
+Server:172.24.0.14:6379
+Role:slave
+Group:08c71d79b8998af23a455c40003454a3157d20b4
+DC:
+CurrentIsFail:0
+Connections:4
+Connect:4
+Requests:61
+Responses:61
+SendBytes:1612
+RecvBytes:62747
+
+Server:172.24.0.15:6379
+Role:slave
+Group:05baedca03d9e79de84cacd955fcafcca0a90343
+DC:
+CurrentIsFail:0
+Connections:4
+Connect:4
+Requests:67
+Responses:67
+SendBytes:1780
+RecvBytes:69845
+...
+```
+(nodes) redis cluster info
+```
+redis-cli -h localhost -c -p 6381 cluster info
+```
+```
+$ redis-cli -h localhost -c -p 6381 cluster info
 cluster_state:ok
 cluster_slots_assigned:16384
 cluster_slots_ok:16384
 cluster_slots_pfail:0
 cluster_slots_fail:0
-cluster_known_nodes:6
+cluster_known_nodes:9
 cluster_size:3
-cluster_current_epoch:6
+cluster_current_epoch:9
 cluster_my_epoch:1
-cluster_stats_messages_ping_sent:310
-cluster_stats_messages_pong_sent:309
-cluster_stats_messages_sent:619
-cluster_stats_messages_ping_received:309
-cluster_stats_messages_pong_received:310
-cluster_stats_messages_received:619
+cluster_stats_messages_ping_sent:3536
+cluster_stats_messages_pong_sent:3499
+cluster_stats_messages_sent:7035
+cluster_stats_messages_ping_received:3491
+cluster_stats_messages_pong_received:3536
+cluster_stats_messages_meet_received:8
+cluster_stats_messages_received:7035
+```
 
-$ docker exec -it node1 redis-cli cluster nodes
-e35038db94bb15781a7b755f53f049d4d368f2aa 172.24.0.14:6379@16379 slave 3e1c9278cd382c0fe54959de0e3f2fc0996ece91 0 1626008143468 3 connected
-985cf76aa3b6d6aaec787d57909a2dd0036d820b 172.24.0.16:6379@16379 slave 5cf61520c26d6dcc41f9e252fddfa6079dd57c59 0 1626008144472 2 connected
-5cf61520c26d6dcc41f9e252fddfa6079dd57c59 172.24.0.12:6379@16379 master - 0 1626008143000 2 connected 5461-10922
-6206555220ef97a6a565821862cc0d70bef770a3 172.24.0.11:6379@16379 myself,master - 0 1626008144000 1 connected 0-5460
-adc98e6c2abfd3c40871fd6597bbe4e6ea5890c9 172.24.0.15:6379@16379 slave 6206555220ef97a6a565821862cc0d70bef770a3 0 1626008142465 1 connected
-3e1c9278cd382c0fe54959de0e3f2fc0996ece91 172.24.0.13:6379@16379 master - 0 1626008143000 3 connected 10923-16383
+(nodes) redis cluster nodes 
+```
+redis-cli -h localhost -c -p 6381 cluster nodes
+```
+```
+$ redis-cli -h localhost -c -p 6381 cluster nodes | sort -k2
+05baedca03d9e79de84cacd955fcafcca0a90343 172.24.0.11:6379@16379 myself,master - 0 1672207853000 1 connected 0-5460
+a45d36d8d19b27aaa3b0736249f72aec601d30e4 172.24.0.12:6379@16379 master - 0 1672207854540 2 connected 5461-10922
+08c71d79b8998af23a455c40003454a3157d20b4 172.24.0.13:6379@16379 master - 0 1672207854540 3 connected 10923-16383
+66ea0396c35b5001c8023ee4e536c574c16395e5 172.24.0.14:6379@16379 slave 08c71d79b8998af23a455c40003454a3157d20b4 0 1672207854540 3 connected
+29f11d425109396a20c16fa40131851e26afa304 172.24.0.15:6379@16379 slave 05baedca03d9e79de84cacd955fcafcca0a90343 0 1672207854000 1 connected
+58f7c03178884392a6b34856355eb508fe2a96c0 172.24.0.16:6379@16379 slave 05baedca03d9e79de84cacd955fcafcca0a90343 0 1672207854000 1 connected
+c59b5df3324953d2d8acba388f793ead4fa8611f 172.24.0.17:6379@16379 slave a45d36d8d19b27aaa3b0736249f72aec601d30e4 0 1672207854540 2 connected
+81f2b8601af8d2e32a74ba4bc439b5c11ca98a84 172.24.0.18:6379@16379 slave a45d36d8d19b27aaa3b0736249f72aec601d30e4 0 1672207854238 2 connected
+146d1a5146fa61c583f4b384d1e53b155ceb48f3 172.24.0.19:6379@16379 slave 08c71d79b8998af23a455c40003454a3157d20b4 0 1672207853535 3 connected
 ```
 
 #### 레디스 데이터 입출력(predixy 7616)
